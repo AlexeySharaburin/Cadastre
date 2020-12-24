@@ -6,27 +6,24 @@ import java.util.Scanner;
 public class Main {
 
     final static int countDeals = 100;
-    final static List<Deal> listDeals = new ArrayList<>();
 
     public static void main(String[] args) throws InterruptedException {
-
 
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("Введите 'честную' цену за квадратный метр для вашего региона, руб.: ");
         int fairPrice = scanner.nextInt();
+
         String unFair = "Нечестная сделка!";
         String fair = "Честная сделка!";
 
-        generateDeals();
-        countFairDeals(fairPrice);
+        countFairDeals(generateDeals(), fairPrice);
         Thread.sleep(3000);
-        fairDeals(fairPrice, fair, unFair);
-
+        fairDeals(generateDeals(), fairPrice, fair, unFair);
 
     }
 
-    public static void countFairDeals(int price) {
+    public static void countFairDeals(List<Deal> listDeals, int price) {
         long countFairDeals = listDeals.stream()
                 .filter(x -> x.pricePro() > price)
                 .count();
@@ -35,7 +32,7 @@ public class Main {
     }
 
 
-    public static void fairDeals(int price, String fair, String unFair) {
+    public static void fairDeals(List<Deal> listDeals, int price, String fair, String unFair) {
         System.out.print("\nСписок всех сделок в вашем регионе с указанием 'честности' сделки:\n");
         listDeals.stream()
                 .map(x -> {
@@ -48,7 +45,8 @@ public class Main {
                 .forEach(System.out::println);
     }
 
-    public static void generateDeals() {
+    public static List<Deal> generateDeals() {
+        List<Deal> listDeals = new ArrayList<>();
         for (int i = 0; i < countDeals; i++) {
             listDeals.add(new Deal(
                     (i + 1),
@@ -57,6 +55,7 @@ public class Main {
                     (new Random().nextInt(10000)) + 1000)
             );
         }
+        return listDeals;
     }
 
 }
